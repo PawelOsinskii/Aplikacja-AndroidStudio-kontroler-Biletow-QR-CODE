@@ -15,32 +15,44 @@
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp">
 
-        <View
-            android:id="@+id/view"
+        <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="match_parent"
-            android:layout_height="241dp" />
+            android:layout_height="262dp">
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="151dp"
+            android:layout_height="110dp"
             android:text="wynik sprawdzenia" />
-
-        <RadioButton
-            android:id="@+id/radioButton"
-            android:layout_width="match_parent"
-            android:layout_height="81dp"
-            android:text="Tryb wejście" />
-
-        <RadioButton
-            android:id="@+id/radioButton2"
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tryb wyjście" />
-        <RadioButton
-            android:id="@+id/radioButton3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="sprawdzenie biletu" />
+            android:orientation="vertical">
+
+
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="match_parent"
+                android:layout_height="81dp"
+                android:text="Tryb wejście" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="match_parent"
+                android:layout_height="63dp"
+                android:text="Tryb wyjście" />
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:text="sprawdzenie biletu" />
+        </RadioGroup>
+
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
