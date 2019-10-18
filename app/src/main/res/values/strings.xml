@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Appka</string>
     <string name="action_settings">Settings</string>
+    <string name="scan_exit">Skanuj wyjście</string>
+    <string name="check">Sprawdź</string>
+    <string name="scan">Skanuj</string>
+    <string name="result">Wynik skanowania:</string>
 </resources>
