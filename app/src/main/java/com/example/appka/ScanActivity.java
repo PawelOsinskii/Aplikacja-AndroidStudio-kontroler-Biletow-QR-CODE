@@ -5,7 +5,6 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
 public class ScanActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler {
@@ -18,6 +17,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         super.onCreate(state);
         mScannerView = new ZBarScannerView(this);    // Programmatically initialize the scanner view
         setContentView(mScannerView);                // Set the scanner view as the content view
+
     }
 
     @Override
