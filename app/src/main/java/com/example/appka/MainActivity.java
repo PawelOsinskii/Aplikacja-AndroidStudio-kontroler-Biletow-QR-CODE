@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         tvresult = findViewById(R.id.tvresult);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -40,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WebActivity.skanujKod("sadasdasd");
+                WebActivity.skanujKod("GUM79SD7");
             //probuje zrobic polaczenie
 
 //
@@ -48,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
 
            // }
-        });
+        }
+
+        );
 
 
 
@@ -65,30 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-//        btnCheck.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (ContextCompat.checkSelfPermission(MainActivity.this,
-//                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-//                    Intent intent = new Intent(MainActivity.this, ScanActivity.class);
-//                    startActivity(intent);
-//                } else {
-//                    requestStoragePermission();
-//                }
-//            }
-//        });
-//        btnExit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (ContextCompat.checkSelfPermission(MainActivity.this,
-//                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-//                    Intent intent = new Intent(MainActivity.this, ScanActivity.class);
-//                    startActivity(intent);
-//                } else {
-//                    requestStoragePermission();
-//                }
-//            }
-//        });
+//
     }
 
     private void requestStoragePermission() {
@@ -119,6 +103,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater  = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == CAMERA_PERMISSION_CODE)  {
@@ -129,4 +120,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }
