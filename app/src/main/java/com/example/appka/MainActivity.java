@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import androidx.core.content.ContextCompat;
 public class MainActivity extends AppCompatActivity {
     private int CAMERA_PERMISSION_CODE = 1;
     public static TextView tvresult;
+    public static TextView status;
+    public static Boolean online = true;
     private static final String NAMESPACE = "http://tempuri.org/";
     private static final String URL = "http://sekob.toliko.pl/Web/ScannerAPI.asmx?wsdl";
     private static final String SOAP_ACTION = "http://tempuri.org/ValidateBarcodeEntry";
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        status = findViewById(R.id.trybOnOf);
         tvresult = findViewById(R.id.tvresult);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
@@ -118,6 +121,33 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.Offline:
+
+                if(!online) MainActivity.tvresult.setText("Jest już ustawiony tryb offline");
+                else {
+                    MainActivity.tvresult.setText("Zmienione na tryb offline");
+                    MainActivity.status.setText("Status offline");
+                    online = false;
+                }
+                return true;
+            case R.id.Online:
+                if(online) MainActivity.tvresult.setText("Jest już ustawiony tryb online");
+                else {
+                    MainActivity.tvresult.setText("Zmienione na tryb online");
+                    MainActivity.status.setText("Status online");
+                    online = true;
+                }
+                return true;
+            case R.id.Aktualizuj:
+                if(!online) MainActivity.tvresult.setText("Nie możesz wykonać aktualizacji w trybie offline");
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

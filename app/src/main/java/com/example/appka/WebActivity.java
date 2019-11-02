@@ -13,6 +13,7 @@ public class WebActivity extends Activity {
     private TextView lblResult;
 
 
+
     static void  skanujKod(String kod) {
         String NAMESPACE = "http://tempuri.org/";
         String URL = "http://sekob.toliko.pl/Web/ScannerAPI.asmx";
