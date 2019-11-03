@@ -8,6 +8,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
+        android:name="com.example.appka.MyApplication">
         android:allowBackup="true"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"

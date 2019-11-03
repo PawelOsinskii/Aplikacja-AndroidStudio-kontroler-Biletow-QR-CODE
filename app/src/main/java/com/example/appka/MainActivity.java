@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String SOAP_ACTION = "http://tempuri.org/ValidateBarcodeEntry";
     private static final String METHOD_NAME = "ValidateBarcodeEntry";
 
+    public static final String androidID = Settings.Secure.getString(MyApplication.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+    public static final String FRONT_CAMERA_ID = "1";
+    public static final String REAR_CAMERA_ID = "0";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +45,19 @@ public class MainActivity extends AppCompatActivity {
         status = findViewById(R.id.trybOnOf);
         tvresult = findViewById(R.id.tvresult);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+//Kod do wyłapywania ID przedniej i tylniej kamery ale powinno się obejść bez tego
+//        CameraManager cManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+//        try {
+//            for(final String cameraId : cManager.getCameraIdList()){
+//                CameraCharacteristics characteristics = cManager.getCameraCharacteristics(cameraId);
+//                int cOrientation = characteristics.get(CameraCharacteristics.LENS_FACING);
+//                if(cOrientation == CameraCharacteristics.LENS_FACING_FRONT) FRONT_CAMERA =  cameraId;
+//            }
+//        } catch (CameraAccessException e) {
+//            e.printStackTrace();
+//        }
+        tvresult.setText(androidID);
 
         StrictMode.setThreadPolicy(policy);
         Button btnScan = findViewById(R.id.btnScan);
@@ -59,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         );
-
 
 
         btnScan.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ActivityCompat.requestPermissions(MainActivity.this,
-                                    new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
                         }
                     })
                     .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -102,20 +119,21 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             ActivityCompat.requestPermissions(this,
-                    new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
         }
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater menuInflater  = getMenuInflater();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
         return true;
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CAMERA_PERMISSION_CODE)  {
+        if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
             } else {
@@ -123,12 +141,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.Offline:
 
-                if(!online) MainActivity.tvresult.setText("Jest już ustawiony tryb offline");
+                if (!online) MainActivity.tvresult.setText("Jest już ustawiony tryb offline");
                 else {
                     MainActivity.tvresult.setText("Zmienione na tryb offline");
                     MainActivity.status.setText("Status offline");
@@ -136,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.Online:
-                if(online) MainActivity.tvresult.setText("Jest już ustawiony tryb online");
+                if (online) MainActivity.tvresult.setText("Jest już ustawiony tryb online");
                 else {
                     MainActivity.tvresult.setText("Zmienione na tryb online");
                     MainActivity.status.setText("Status online");
@@ -144,7 +163,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.Aktualizuj:
-                if(!online) MainActivity.tvresult.setText("Nie możesz wykonać aktualizacji w trybie offline");
+                if (!online)
+                    MainActivity.tvresult.setText("Nie możesz wykonać aktualizacji w trybie offline");
 
             default:
                 return super.onOptionsItemSelected(item);
