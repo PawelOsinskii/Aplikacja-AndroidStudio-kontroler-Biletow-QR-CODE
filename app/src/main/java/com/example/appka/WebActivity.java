@@ -19,7 +19,6 @@ public class WebActivity extends Activity {
         String URL = "http://sekob.toliko.pl/Web/ScannerAPI.asmx";
         String SOAP_ACTION = "http://tempuri.org/ValidateBarcodeEntry";
         String METHOD_NAME = "ValidateBarcodeEntry";
-        System.out.println("LOOOOOOOOOOOOOOOOOOO");
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         request.addProperty("code", kod);// Parameter for Method
         request.addProperty("scannerId", "test");// Parameter for Method
@@ -33,12 +32,10 @@ public class WebActivity extends Activity {
 
 
         try {
-            System.out.println("LOOOOOOOOOOOOOOOOOOO2");
-            androidHttpTransport.call(SOAP_ACTION, envelope);  // w tym miejscu cos sie pierdoli
-            System.out.println("LOOOOOOOOOOOOOOOOOOO3");
 
+            androidHttpTransport.call(SOAP_ACTION, envelope);
             Object resultsRequestSOAP = envelope.bodyIn;
-            System.out.println("LOOOOOOOOOOOOOOOOOOO4");
+            ;
 
 
             MainActivity.tvresult.setText("Response::" + resultsRequestSOAP.toString());
