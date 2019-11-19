@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 WebActivity.skanujKod("GUM79SD7");
-            //probuje zrobic polaczenie
+
 
 //
                 }
