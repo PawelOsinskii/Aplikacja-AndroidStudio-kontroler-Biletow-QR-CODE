@@ -31,30 +31,29 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public DataBaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
-<<<<<<< HEAD
+
         SQLiteDatabase db = this.getWritableDatabase();
-=======
->>>>>>> 032d6dfb6d546a4ef050f84d198732849bc74fff
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-<<<<<<< HEAD
+
         db.execSQL("create table " + Table_NAME1 +" (Code VARCHAR(50) NOT NULL, MaxEntryCount INTEGER NOT NULL DEFAULT '1', CurrentEntryCount INTEGER NOT NULL DEFAULT '0', Active BOOLEAN NOT NULL DEFAULT '1', " +
                 "LastEntry TIMESTAMP DEFAULT NULL, ValidFrom TIMESTAMP DEFAULT (strftime('%Y-%m-%d %H:%M:%f', '1900-01-01 00:00:00.001', 'localtime')), ValidTo TIMESTAMP DEFAULT (strftime('%Y-%m-%d %H:%M:%f', '1900-01-01 00:00:00.001', 'localtime')), " +
                 "Sektor VARCHAR(50) DEFAULT NULL, Rzad VARCHAR(50) DEFAULT NULL, Miejsce VARCHAR(50) DEFAULT NULL, PESEL VARCHAR(50) DEFAULT NULL, Imie VARCHAR(50) DEFAULT NULL, Nazwisko VARCHAR(50) DEFAULT NULL, Opis VARCHAR(50) DEFAULT NULL, Typ VARCHAR(50) DEFAULT NULL, Numer INTEGER NOT NULL DEFAULT '0', Status INTEGER NOT NULL DEFAULT '0',  Event VARCHAR(250) DEFAULT '')");
-=======
+
      //   db.execSQL();
->>>>>>> 032d6dfb6d546a4ef050f84d198732849bc74fff
+
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-<<<<<<< HEAD
+
         db.execSQL("DROP TABLE IF EXISTS "+Table_NAME1);
-=======
->>>>>>> 032d6dfb6d546a4ef050f84d198732849bc74fff
+
+
 
     }
 }
