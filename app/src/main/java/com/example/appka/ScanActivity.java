@@ -38,6 +38,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         Log.v("kkkk", result.getContents()); // Prints scan results
         Log.v("uuuu", result.getBarcodeFormat().getName()); // Prints the scan format (qrcode, pdf417 etc.)
 
+        WebActivity.getBarcodes("test");
         WebActivity.skanujKod(result.getContents());
         onBackPressed();
 

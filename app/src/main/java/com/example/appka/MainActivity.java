@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         myDB = new DataBaseHelper(this);
-        WebActivity.getBarcodes("test");
         status = findViewById(R.id.trybOnOf);
         tvresult = findViewById(R.id.tvresult);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
