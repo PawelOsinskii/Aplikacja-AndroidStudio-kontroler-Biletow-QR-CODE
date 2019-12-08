@@ -12,12 +12,10 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 
 public class WebActivity extends Activity {
-
+    //private DataBaseHelper listOfTickets;
     private TextView lblResult;
-    private static int timeOut = 1000;
     private static String NAMESPACE = "http://tempuri.org/";
 
     static void skanujKod(String kod) {
@@ -33,6 +31,7 @@ public class WebActivity extends Activity {
 
 
         try {
+            int timeOut = 1000;
             HttpTransportSE androidHttpTransport = new HttpTransportSE(URL, timeOut);
             androidHttpTransport.call(SOAP_ACTION, envelope);
             Object resultsRequestSOAP = envelope.bodyIn;
@@ -56,7 +55,7 @@ public class WebActivity extends Activity {
         String METHOD_NAME = "GetBarcodes";
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         request.addProperty("deviceId", deviceId);
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
         envelope.dotNet = true;
         envelope.setOutputSoapObject(request);
 
@@ -64,18 +63,56 @@ public class WebActivity extends Activity {
         try {
             HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
             androidHttpTransport.call(SOAP_ACTION, envelope);
-            Object resultsRequestSoap = envelope.bodyIn;
+            SoapObject resultRequestSoap = (SoapObject) envelope.bodyIn;
             Log.d("***********", request.toString());
-            Log.d("***********", resultsRequestSoap.toString());
+            Log.d("***********", resultRequestSoap.toString());
+            extractDataFromXml(resultRequestSoap);
 
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (HttpResponseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
 
     }
+
+    private static void extractDataFromXml(SoapObject resultRequestSoap) {
+        //SoapObject root = (SoapObject) resultRequestSoap.getProperty(0);
+        SoapObject s_deals = (SoapObject) resultRequestSoap.getProperty("GetBarcodesResult");
+
+        //System.out.println("********Count : "+ s_deals.getPropertyCount());
+
+        for (int i = 0; i < s_deals.getPropertyCount(); i++)
+        {
+            Object property = s_deals.getProperty(i);
+            if (property instanceof SoapObject)
+            {
+                SoapObject category_list = (SoapObject) property;
+                String C =  category_list.getProperty("C" ).toString();
+                String E =  category_list.getProperty("E" ).toString();
+                String CE = category_list.getProperty("CE").toString();
+                String F =  category_list.getProperty("F" ).toString();
+                String I =  category_list.getProperty("T" ).toString();
+                String Se = category_list.getProperty("Se").toString();
+                String Rz = category_list.getProperty("Rz").toString();
+                String Mi = category_list.getProperty("Mi").toString();
+                String PE = category_list.getProperty("PE").toString();
+                String Im = category_list.getProperty("Im").toString();
+                String Na = category_list.getProperty("Na").toString();
+                String O =  category_list.getProperty("O").toString();
+                String Ro = category_list.getProperty("Ro").toString();
+                String No = category_list.getProperty("No").toString();
+                String St = category_list.getProperty("St").toString();
+                String Ev = category_list.getProperty("Ev").toString();
+
+                MainActivity.myDB.inserData(C, E, CE, F, I, Se, Rz, Mi, PE, Im, Na, O, Ro, No, St, Ev);
+            }
+        }
+    }
+
 }
 
 

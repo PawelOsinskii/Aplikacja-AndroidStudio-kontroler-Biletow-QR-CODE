@@ -1,5 +1,6 @@
 package com.example.appka;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -32,8 +33,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public DataBaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
 
-        SQLiteDatabase db = this.getWritableDatabase();
-
     }
 
     @Override
@@ -52,8 +51,39 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS "+Table_NAME1);
+        onCreate(db);
+
+    }
+    public boolean inserData(String code, String maxEntryCount, String currentEntryCount, String validFrom,
+                             String validTo, String sektor, String rzad, String miejsce, String PESEL, String Imie,
+                             String Nazwisko, String Opis, String typ, String Numer, String Status, String Event){
 
 
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_1, code);
+        contentValues.put(COL_2, maxEntryCount);
+        contentValues.put(COL_3, currentEntryCount);
+        //contentValues.put(COL_4, active);
+        //contentValues.put(COL_5, lastEntry);
+        contentValues.put(COL_6, validFrom);
+        contentValues.put(COL_7, validTo);
+        contentValues.put(COL_8, sektor);
+        contentValues.put(COL_9, rzad);
+        contentValues.put(COL_10, miejsce);
+        contentValues.put(COL_11, PESEL);
+        contentValues.put(COL_12, Imie);
+        contentValues.put(COL_13, Nazwisko);
+        contentValues.put(COL_14, Opis);
+        contentValues.put(COL_15, typ);
+        contentValues.put(COL_16, Numer);
+        contentValues.put(COL_17, Status);
+        contentValues.put(COL_18, Event);
+        long restult = db.insert(Table_NAME1, null, contentValues);
+        if(restult == -1)
+            return false;
+        return true;
 
     }
 }
