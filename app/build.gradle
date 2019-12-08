@@ -34,6 +34,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'me.dm7.barcodescanner:zbar:1.8.4'
-    implementation files('libs/ksoap2-android-full-2.1.2.jar')
-
+    implementation files('libs/ksoap2-android-assembly-3.6.4-jar-with-dependencies.jar')
 }
