@@ -2,17 +2,14 @@ package com.example.appka;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.format.Time;
 
 import androidx.annotation.Nullable;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Kody.db";
@@ -45,11 +42,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("create table " + Table_NAME1 +" (Code VARCHAR(50) NOT NULL, MaxEntryCount INTEGER NOT NULL DEFAULT '1', CurrentEntryCount INTEGER NOT NULL DEFAULT '0', Active BOOLEAN NOT NULL DEFAULT '1', " +
+        db.execSQL("create table " + Table_NAME1 + " (Code VARCHAR(50) NOT NULL, MaxEntryCount INTEGER NOT NULL DEFAULT '1', CurrentEntryCount INTEGER NOT NULL DEFAULT '0', Active BOOLEAN NOT NULL DEFAULT '1', " +
                 "LastEntry TIMESTAMP DEFAULT NULL, ValidFrom TIMESTAMP DEFAULT (strftime('%Y-%m-%d %H:%M:%f', '1900-01-01 00:00:00.001', 'localtime')), ValidTo TIMESTAMP DEFAULT (strftime('%Y-%m-%d %H:%M:%f', '1900-01-01 00:00:00.001', 'localtime')), " +
                 "Sektor VARCHAR(50) DEFAULT NULL, Rzad VARCHAR(50) DEFAULT NULL, Miejsce VARCHAR(50) DEFAULT NULL, PESEL VARCHAR(50) DEFAULT NULL, Imie VARCHAR(50) DEFAULT NULL, Nazwisko VARCHAR(50) DEFAULT NULL, Opis VARCHAR(50) DEFAULT NULL, Typ VARCHAR(50) DEFAULT NULL, Numer INTEGER NOT NULL DEFAULT '0', Status INTEGER NOT NULL DEFAULT '0',  Event VARCHAR(250) DEFAULT '')");
 
-     //   db.execSQL();
+        //   db.execSQL();
 
 
     }
@@ -57,14 +54,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("DROP TABLE IF EXISTS "+Table_NAME1);
+        db.execSQL("DROP TABLE IF EXISTS " + Table_NAME1);
         onCreate(db);
 
     }
+
     public boolean inserData(String code, String maxEntryCount, String currentEntryCount, String validFrom,
                              String validTo, String sektor, String rzad, String miejsce, String PESEL, String Imie,
-                             String Nazwisko, String Opis, String typ, String Numer, String Status, String Event){
-
+                             String Nazwisko, String Opis, String typ, String Numer, String Status, String Event) {
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -72,8 +69,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_1, code);
         contentValues.put(COL_2, maxEntryCount);
         contentValues.put(COL_3, currentEntryCount);
-     //   contentValues.put(COL_4, 1);
-       // contentValues.put(COL_5, 0);
+        //   contentValues.put(COL_4, 1);
+        // contentValues.put(COL_5, 0);
         contentValues.put(COL_6, validFrom);
         contentValues.put(COL_7, validTo);
         contentValues.put(COL_8, sektor);
@@ -91,31 +88,38 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return restult != -1;
 
     }
-    public Boolean validEntry(String code){
+
+    public Boolean validEntry(String code) {
         String wartosc1 = "";
         String wartosc2 = "";
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c = db.rawQuery("SELECT maxEntryCount, currentEntryCount FROM "+Table_NAME1+" WHERE " +COL_1+"=" +"'"+code+"'", null);
+        Cursor c = db.rawQuery("SELECT maxEntryCount, currentEntryCount FROM " + Table_NAME1 + " WHERE " + COL_1 + "=" + "'" + code + "'", null);
 
 
-        if(c.moveToFirst()){
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
+        if (c != null && c.moveToFirst()) {
 
-                wartosc1 = c.getString(0);
-               wartosc2 = c.getString(1);
-                System.out.println("WARTOOOOOOOOOOOOSC1 "+wartosc1);
-                System.out.println("WARTOOOOOOOOOOOOSC2 "+wartosc2);
+            wartosc1 = c.getString(0);
+            wartosc2 = c.getString(1);
+            c.close();
+            System.out.println("WARTOOOOOOOOOOOOSC1 " + wartosc1);
+            System.out.println("WARTOOOOOOOOOOOOSC2 " + wartosc2);
 
 
-        }
-        c.close();
-        if(Integer.parseInt(wartosc1)>Integer.parseInt(wartosc2)){
-            System.out.println("WARTOOOOOOOOOOOOSC1 "+wartosc2);
-            Date currentTime = Calendar.getInstance().getTime();
+        } else return false;
+
+        if (Integer.parseInt(wartosc1) > Integer.parseInt(wartosc2)) {
+            System.out.println("WARTOOOOOOOOOOOOSC1 " + wartosc2);
+            Calendar calendar = Calendar.getInstance();
+            int hour24hrs = calendar.get(Calendar.HOUR_OF_DAY);
+            int minutes = calendar.get(Calendar.MINUTE);
+            int seconds = calendar.get(Calendar.SECOND);
+            String czas = hour24hrs + ":" + minutes + ":" + seconds;
             ContentValues cv = new ContentValues();
             Timestamp ts = new Timestamp(-1);
-            cv.put(COL_5, String.valueOf(ts)); //These Fields should be your String values of actual column names
-            cv.put(COL_3,"2");
-            db.update(Table_NAME1, cv, "Code="+"'"+code+"'", null);
+            cv.put(COL_5, czas); //These Fields should be your String values of actual column names
+            cv.put(COL_3, (Integer.parseInt(wartosc2) + 1));
+            db.update(Table_NAME1, cv, "Code=" + "'" + code + "'", null);
 
             db.close();
             return true;
@@ -125,17 +129,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return false;
 
 
-
-
-
     }
-    public String lastEntry(String code){
+
+    public String lastEntry(String code) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c = db.rawQuery("SELECT LastEntry  FROM "+Table_NAME1+" WHERE " +COL_1+"=" +"'"+code+"'", null);
-        if(c.moveToFirst()){
+        Cursor c = db.rawQuery("SELECT LastEntry  FROM " + Table_NAME1 + " WHERE " + COL_1 + "=" + "'" + code + "'", null);
+
+        if (c.moveToFirst()) {
 
             String wartosc1 = c.getString(0);
-        return " Bilet zostal zeskanowany" + c.getString(0);}
+            return " Bilet zostal zeskanowany o " + c.getString(0);
+        }
         return "Niepoprawny kod kreskowy";
     }
 }
