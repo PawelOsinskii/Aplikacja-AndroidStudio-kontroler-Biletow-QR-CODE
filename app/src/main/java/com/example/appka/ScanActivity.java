@@ -14,6 +14,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+
         mScannerView = new ZBarScannerView(this);    // Programmatically initialize the scanner view
         setContentView(mScannerView);                // Set the scanner view as the content view
 
@@ -37,8 +38,8 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         // Do something with the result here
         Log.v("kkkk", result.getContents()); // Prints scan results
         Log.v("uuuu", result.getBarcodeFormat().getName()); // Prints the scan format (qrcode, pdf417 etc.)
-
         WebActivity.getBarcodes("test");
+
         WebActivity.skanujKod(result.getContents());
         onBackPressed();
 

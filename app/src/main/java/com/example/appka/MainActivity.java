@@ -66,9 +66,13 @@ public class MainActivity extends AppCompatActivity {
         Button btnCheck = findViewById(R.id.btnCheck);
         Button btnExit = findViewById(R.id.btnExit);
         btnCheck.setOnClickListener(new View.OnClickListener() {
-                                        @Override
+                                                @Override
                                         public void onClick(View v) {
-                                           WebActivity.skanujKod("GUM79SD7");
+
+                                            if( myDB.validEntry("1ebb6uxd")) WebActivity.skanujKod("1ebb6uxd");
+                                            else{tvresult.setText(myDB.lastEntry("1ebb6uxd"));
+
+                                            }
 
 
 //

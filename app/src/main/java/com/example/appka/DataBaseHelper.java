@@ -2,10 +2,17 @@ package com.example.appka;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.format.Time;
 
 import androidx.annotation.Nullable;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Kody.db";
@@ -65,8 +72,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_1, code);
         contentValues.put(COL_2, maxEntryCount);
         contentValues.put(COL_3, currentEntryCount);
-        //contentValues.put(COL_4, active);
-        //contentValues.put(COL_5, lastEntry);
+     //   contentValues.put(COL_4, 1);
+       // contentValues.put(COL_5, 0);
         contentValues.put(COL_6, validFrom);
         contentValues.put(COL_7, validTo);
         contentValues.put(COL_8, sektor);
@@ -81,9 +88,54 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_17, Status);
         contentValues.put(COL_18, Event);
         long restult = db.insert(Table_NAME1, null, contentValues);
-        if(restult == -1)
-            return false;
-        return true;
+        return restult != -1;
 
+    }
+    public Boolean validEntry(String code){
+        String wartosc1 = "";
+        String wartosc2 = "";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db.rawQuery("SELECT maxEntryCount, currentEntryCount FROM "+Table_NAME1+" WHERE " +COL_1+"=" +"'"+code+"'", null);
+
+
+        if(c.moveToFirst()){
+
+                wartosc1 = c.getString(0);
+               wartosc2 = c.getString(1);
+                System.out.println("WARTOOOOOOOOOOOOSC1 "+wartosc1);
+                System.out.println("WARTOOOOOOOOOOOOSC2 "+wartosc2);
+
+
+        }
+        c.close();
+        if(Integer.parseInt(wartosc1)>Integer.parseInt(wartosc2)){
+            System.out.println("WARTOOOOOOOOOOOOSC1 "+wartosc2);
+            Date currentTime = Calendar.getInstance().getTime();
+            ContentValues cv = new ContentValues();
+            Timestamp ts = new Timestamp(-1);
+            cv.put(COL_5, String.valueOf(ts)); //These Fields should be your String values of actual column names
+            cv.put(COL_3,"2");
+            db.update(Table_NAME1, cv, "Code="+"'"+code+"'", null);
+
+            db.close();
+            return true;
+        }
+
+        db.close();
+        return false;
+
+
+
+
+
+    }
+    public String lastEntry(String code){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db.rawQuery("SELECT LastEntry  FROM "+Table_NAME1+" WHERE " +COL_1+"=" +"'"+code+"'", null);
+        if(c.moveToFirst()){
+
+            String wartosc1 = c.getString(0);
+        return " Bilet zostal zeskanowany" + c.getString(0);}
+        return "Niepoprawny kod kreskowy";
     }
 }
