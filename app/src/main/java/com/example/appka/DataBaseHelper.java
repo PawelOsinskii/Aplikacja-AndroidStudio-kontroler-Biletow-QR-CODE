@@ -8,13 +8,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.sql.Timestamp;
 import java.util.Calendar;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Kody.db";
-    public static final String Table_NAME1 = "kody_table";
-    public static final String Table_NAME2 = "bufor_table";
+    public static final String Table_NAME = "kody_table";
     public static final String COL_1 = "Code"; //VARCHAR(50) NOT NULL
     public static final String COL_2 = "MaxEntryCount"; //INTEGER NOT NULL DEFAULT '1'
     public static final String COL_3 = "CurrentEntryCount"; //INTEGER NOT NULL DEFAULT '0'
@@ -42,7 +43,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("create table " + Table_NAME1 + " (Code VARCHAR(50) NOT NULL, MaxEntryCount INTEGER NOT NULL DEFAULT '1', CurrentEntryCount INTEGER NOT NULL DEFAULT '0', Active BOOLEAN NOT NULL DEFAULT '1', " +
+        db.execSQL("create table " + Table_NAME + " (Code VARCHAR(50) NOT NULL, MaxEntryCount INTEGER NOT NULL DEFAULT '1', CurrentEntryCount INTEGER NOT NULL DEFAULT '0', Active BOOLEAN NOT NULL DEFAULT '1', " +
                 "LastEntry TIMESTAMP DEFAULT NULL, ValidFrom TIMESTAMP DEFAULT (strftime('%Y-%m-%d %H:%M:%f', '1900-01-01 00:00:00.001', 'localtime')), ValidTo TIMESTAMP DEFAULT (strftime('%Y-%m-%d %H:%M:%f', '1900-01-01 00:00:00.001', 'localtime')), " +
                 "Sektor VARCHAR(50) DEFAULT NULL, Rzad VARCHAR(50) DEFAULT NULL, Miejsce VARCHAR(50) DEFAULT NULL, PESEL VARCHAR(50) DEFAULT NULL, Imie VARCHAR(50) DEFAULT NULL, Nazwisko VARCHAR(50) DEFAULT NULL, Opis VARCHAR(50) DEFAULT NULL, Typ VARCHAR(50) DEFAULT NULL, Numer INTEGER NOT NULL DEFAULT '0', Status INTEGER NOT NULL DEFAULT '0',  Event VARCHAR(250) DEFAULT '')");
 
@@ -54,7 +55,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("DROP TABLE IF EXISTS " + Table_NAME1);
+        db.execSQL("DROP TABLE IF EXISTS " + Table_NAME);
         onCreate(db);
 
     }
@@ -66,15 +67,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_1, code);
-        contentValues.put(COL_2, maxEntryCount);
-        contentValues.put(COL_3, currentEntryCount);
-        //   contentValues.put(COL_4, 1);
-        // contentValues.put(COL_5, 0);
-        contentValues.put(COL_6, validFrom);
-        contentValues.put(COL_7, validTo);
-        contentValues.put(COL_8, sektor);
-        contentValues.put(COL_9, rzad);
+        contentValues.put(COL_1,  code);
+        contentValues.put(COL_2,  maxEntryCount);
+        contentValues.put(COL_3,  currentEntryCount);
+        //contentValues.put(COL_4,  1);
+        //contentValues.put(COL_5,  0);
+        contentValues.put(COL_6,  validFrom);
+        contentValues.put(COL_7,  validTo);
+        contentValues.put(COL_8,  sektor);
+        contentValues.put(COL_9,  rzad);
         contentValues.put(COL_10, miejsce);
         contentValues.put(COL_11, PESEL);
         contentValues.put(COL_12, Imie);
@@ -84,7 +85,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_16, Numer);
         contentValues.put(COL_17, Status);
         contentValues.put(COL_18, Event);
-        long restult = db.insert(Table_NAME1, null, contentValues);
+        long restult = db.insert(Table_NAME, null, contentValues);
         return restult != -1;
 
     }
@@ -93,7 +94,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String wartosc1 = "";
         String wartosc2 = "";
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c = db.rawQuery("SELECT maxEntryCount, currentEntryCount FROM " + Table_NAME1 + " WHERE " + COL_1 + "=" + "'" + code + "'", null);
+        Cursor c = db.rawQuery("SELECT maxEntryCount, currentEntryCount FROM " + Table_NAME + " WHERE " + COL_1 + "=" + "'" + code + "'", null);
 
 
         System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
@@ -119,7 +120,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             Timestamp ts = new Timestamp(-1);
             cv.put(COL_5, czas); //These Fields should be your String values of actual column names
             cv.put(COL_3, (Integer.parseInt(wartosc2) + 1));
-            db.update(Table_NAME1, cv, "Code=" + "'" + code + "'", null);
+            db.update(Table_NAME, cv, "Code=" + "'" + code + "'", null);
 
             db.close();
             return true;
@@ -133,7 +134,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public String lastEntry(String code) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c = db.rawQuery("SELECT LastEntry  FROM " + Table_NAME1 + " WHERE " + COL_1 + "=" + "'" + code + "'", null);
+        Cursor c = db.rawQuery("SELECT LastEntry  FROM " + Table_NAME + " WHERE " + COL_1 + "=" + "'" + code + "'", null);
 
         if (c.moveToFirst()) {
 
@@ -141,5 +142,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return " Bilet zostal zeskanowany o " + c.getString(0);
         }
         return "Niepoprawny kod kreskowy";
+    }
+
+    public void clearDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String clearDBQuery = "DELETE FROM "+ Table_NAME;
+        db.execSQL(clearDBQuery);
     }
 }

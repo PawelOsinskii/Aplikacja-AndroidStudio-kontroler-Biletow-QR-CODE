@@ -24,7 +24,7 @@ public class WebActivity extends Activity {
         String METHOD_NAME = "ValidateBarcodeEntry";
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         request.addProperty("code", kod);// Parameter for Method
-        request.addProperty("scannerId", "test");// Parameter for Method
+        request.addProperty("scannerId", MainActivity.DEVICEID);// Parameter for Method
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.dotNet = true;
         envelope.setOutputSoapObject(request);
@@ -91,24 +91,24 @@ public class WebActivity extends Activity {
             if (property instanceof SoapObject)
             {
                 SoapObject category_list = (SoapObject) property;
-                String C =  category_list.getProperty("C" ).toString();
-                String E =  category_list.getProperty("E" ).toString();
-                String CE = category_list.getProperty("CE").toString();
-                String F =  category_list.getProperty("F" ).toString();
-                String I =  category_list.getProperty("T" ).toString();
-                String Se = category_list.getProperty("Se").toString();
-                String Rz = category_list.getProperty("Rz").toString();
-                String Mi = category_list.getProperty("Mi").toString();
-                String PE = category_list.getProperty("PE").toString();
-                String Im = category_list.getProperty("Im").toString();
-                String Na = category_list.getProperty("Na").toString();
-                String O =  category_list.getProperty("O").toString();
-                String Ro = category_list.getProperty("Ro").toString();
-                String No = category_list.getProperty("No").toString();
-                String St = category_list.getProperty("St").toString();
-                String Ev = category_list.getProperty("Ev").toString();
+                String code =           category_list.getProperty("C" ).toString();
+                String maxEntryCount =  category_list.getProperty("E" ).toString();
+                String curEntryCount =  category_list.getProperty("CE").toString();
+                String validFrom =      category_list.getProperty("F" ).toString();
+                String validTo =        category_list.getProperty("T" ).toString();
+                String sektor =         category_list.getProperty("Se").toString();
+                String rzad =           category_list.getProperty("Rz").toString();
+                String miejsce =        category_list.getProperty("Mi").toString();
+                String pesel =          category_list.getProperty("PE").toString();
+                String imie =           category_list.getProperty("Im").toString();
+                String nazwisko =       category_list.getProperty("Na").toString();
+                String opis =           category_list.getProperty("O" ).toString();
+                String rodzaj =         category_list.getProperty("Ro").toString();
+                String numer =          category_list.getProperty("No").toString();
+                String status =         category_list.getProperty("St").toString();
+                String event =          category_list.getProperty("Ev").toString();
 
-                MainActivity.myDB.inserData(C, E, CE, F, I, Se, Rz, Mi, PE, Im, Na, O, Ro, No, St, Ev);
+                MainActivity.myDB.inserData(code, maxEntryCount, curEntryCount, validFrom, validTo, sektor, rzad, miejsce, pesel, imie, nazwisko, opis, rodzaj, numer, status, event);
             }
         }
     }

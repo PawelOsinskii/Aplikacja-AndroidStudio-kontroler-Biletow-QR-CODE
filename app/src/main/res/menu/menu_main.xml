@@ -8,7 +8,8 @@
         android:title="Offline" />
     <item android:id="@+id/Aktualizuj"
         android:title="Aktualizuj" />
-
+    <item android:id="@+id/deleteData"
+        android:title="Usuń Dane" />
 
 
 </menu>

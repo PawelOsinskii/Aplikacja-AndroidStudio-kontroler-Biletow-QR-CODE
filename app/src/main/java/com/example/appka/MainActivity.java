@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String METHOD_NAME = "ValidateBarcodeEntry";
 
     public static final String androidID = Settings.Secure.getString(MyApplication.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+    public static final String DEVICEID = "test";
     public static final String FRONT_CAMERA_ID = "1";
     public static final String REAR_CAMERA_ID = "0";
 
@@ -171,8 +172,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.Aktualizuj:
                 if (!online)
                     MainActivity.tvresult.setText("Nie możesz wykonać aktualizacji w trybie offline");
-                WebActivity.getBarcodes("test");
+                WebActivity.getBarcodes(DEVICEID);
                 Toast.makeText(this, "Pobrano kody z bazy danych", Toast.LENGTH_LONG).show();
+            case R.id.deleteData:
+                myDB.clearDatabase();
+                Toast.makeText(this, "Usunięto kody z lokalnej bazy danych", Toast.LENGTH_LONG).show();
             default:
                 return super.onOptionsItemSelected(item);
         }
