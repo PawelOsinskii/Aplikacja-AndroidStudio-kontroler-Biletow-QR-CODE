@@ -174,9 +174,11 @@ public class MainActivity extends AppCompatActivity {
                     MainActivity.tvresult.setText("Nie możesz wykonać aktualizacji w trybie offline");
                 WebActivity.getBarcodes(DEVICEID);
                 Toast.makeText(this, "Pobrano kody z bazy danych", Toast.LENGTH_LONG).show();
+                return true;
             case R.id.deleteData:
                 myDB.clearDatabase();
                 Toast.makeText(this, "Usunięto kody z lokalnej bazy danych", Toast.LENGTH_LONG).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
