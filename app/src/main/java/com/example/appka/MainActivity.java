@@ -25,13 +25,14 @@ import androidx.core.content.ContextCompat;
 public class MainActivity extends AppCompatActivity {
     public static final String androidID = Settings.Secure.getString(MyApplication.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     public static final String DEVICEID = "test";
-    public static final String FRONT_CAMERA_ID = "1";
-    public static final String REAR_CAMERA_ID = "0";
+    public static final Integer FRONT_CAMERA_ID = 1;
+    public static final Integer REAR_CAMERA_ID = 0;
     private static final String NAMESPACE = "http://tempuri.org/";
     private static final String URL = "http://sekob.toliko.pl/Web/ScannerAPI.asmx?wsdl";
     private static final String SOAP_ACTION = "http://tempuri.org/ValidateBarcodeEntry";
     private static final String METHOD_NAME = "ValidateBarcodeEntry";
     public static DataBaseHelper myDB;
+    public static BufferDataBase buffer;
     public static TextView tvresult;
     public static TextView status;
     public static Boolean online = true;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         myDB = new DataBaseHelper(this);
+        buffer = new BufferDataBase(this);
         status = findViewById(R.id.trybOnOf);
         tvresult = findViewById(R.id.tvresult);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -77,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                                             } else {
                                                 requestStoragePermission();
                                             }
-
                                         }
 
 
@@ -96,10 +97,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     requestStoragePermission();
                 }
-
             }
         });
-//
     }
 
     private void requestStoragePermission() {
@@ -183,6 +182,4 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 }

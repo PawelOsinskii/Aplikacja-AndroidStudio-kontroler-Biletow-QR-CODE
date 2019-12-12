@@ -38,6 +38,7 @@ public class WebActivity extends Activity {
             androidHttpTransport.call(SOAP_ACTION, envelope);
             Object resultsRequestSOAP = envelope.bodyIn;
 
+
             Log.d("Testing", "Response::" + resultsRequestSOAP.toString());
             MainActivity.tvresult.setText("Response::" + resultsRequestSOAP.toString());
             // Stuff }

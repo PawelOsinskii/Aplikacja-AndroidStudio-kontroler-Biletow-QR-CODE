@@ -10,6 +10,7 @@ import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
 import static com.example.appka.MainActivity.myDB;
 
+
 public class ScanActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler {
     private ZBarScannerView mScannerView;
     //camera permission is needed.

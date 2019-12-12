@@ -5,7 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import static com.example.appka.MainActivity.buffer;
+import static com.example.appka.MainActivity.REAR_CAMERA_ID;
 import androidx.annotation.Nullable;
 
 import java.sql.Timestamp;
@@ -95,14 +96,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor c = db.rawQuery("SELECT maxEntryCount, currentEntryCount FROM " + Table_NAME + " WHERE " + COL_1 + "=" + "'" + code + "'", null);
 
-
-
         if (c != null && c.moveToFirst()) {
-
             wartosc1 = c.getString(0);
             wartosc2 = c.getString(1);
-
-
         } else{
             c.close();
             db.close();
@@ -110,7 +106,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
 
         if (Integer.parseInt(wartosc1) > Integer.parseInt(wartosc2)) {
-
             Calendar calendar = Calendar.getInstance();
             int hour24hrs = calendar.get(Calendar.HOUR_OF_DAY);
             int minutes = calendar.get(Calendar.MINUTE);
@@ -121,17 +116,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             cv.put(COL_5, czas); //These Fields should be your String values of actual column names
             cv.put(COL_3, (Integer.parseInt(wartosc2) + 1));
             db.update(Table_NAME, cv, "Code=" + "'" + code + "'", null);
+            buffer.insertData(REAR_CAMERA_ID, code, 33,czas);
+
 
             c.close();
             db.close();
             return true;
         }
-
         c.close();
         db.close();
         return false;
-
-
     }
     public String checkTicket(String code){
         String wartosc1 = "";
@@ -199,7 +193,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             if (Integer.parseInt(curEntryCount) == Integer.parseInt(c.getString(0))){
                 c.close();
                 db.close();
-                return false;}
+                return false;
+            }
         c.close();
         db.close();
         return true;

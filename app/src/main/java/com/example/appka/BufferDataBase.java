@@ -8,13 +8,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BufferDataBase extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "buffer.db";
-    public static final String Table_NAME = "bufor_table";
-    public static final String COL_1 = "I"; //VARCHAR(50) NOT NULL
-    public static final String COL_2 = "C"; //VARCHAR(50) NOT NULL
-    public static final String COL_3 = "T"; //VARCHAR(50) NOT NULL
-    public static final String COL_4 = "D"; //VARCHAR(50) NOT NULL
+    public static final String Table_NAME = "buffer_table";
+    public static final String COL_1 = "ID";   //INTEGER NOT NULL
+    public static final String COL_2 = "Code"; //VARCHAR(50) NOT NULL
+    public static final String COL_3 = "Type"; //INTEGER NOT NULL
+    public static final String COL_4 = "OperationTime"; //VARCHAR(50) NOT NULL
 //TODO change columns
 
     public BufferDataBase(@Nullable Context context){
@@ -23,8 +26,7 @@ public class BufferDataBase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + Table_NAME + " (Code VARCHAR(50) NOT NULL )");
-
+        db.execSQL("create table " + Table_NAME + " (ID INTEGER NOT NULL , Code VARCHAR(50) NOT NULL, Type INTEGER NOT NULL, OperationTime VARCHAR(50))");
     }
 
     @Override
@@ -33,21 +35,37 @@ public class BufferDataBase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Boolean insertData(int I, String C, int T, String D) {
+    public Boolean insertData(int id, String code, int type, String operationTime) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_1,  I);
-        contentValues.put(COL_2,  C);
-        contentValues.put(COL_3,  T);
-        contentValues.put(COL_4,  D);
+        contentValues.put(COL_1,  id);
+        contentValues.put(COL_2,  code);
+        contentValues.put(COL_3,  type);
+        contentValues.put(COL_4,  operationTime);
         long restult = db.insert(Table_NAME, null, contentValues);
         return restult != -1;
     }
 
-    public Cursor getAllData() {
+    public List<BufferRecord> getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + Table_NAME, null);
-        return result;
+        List<BufferRecord> buffList = new ArrayList<>();
+
+        if(result.getCount() == 0)
+            return null;
+        while(result.moveToNext()) {
+            int id = result.getInt(0);
+            String code = result.getString(1);
+            int type = result.getInt(2);
+            String operationTime = result.getString(3);
+            buffList.add(new BufferRecord(id, code, type, operationTime));
+        }
+        return buffList;
+    }
+    public void clearDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String clearDBQuery = "DELETE FROM "+ Table_NAME;
+        db.execSQL(clearDBQuery);
     }
 
 
