@@ -171,7 +171,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.Aktualizuj:
                 if (!online)
                     MainActivity.tvresult.setText("Nie możesz wykonać aktualizacji w trybie offline");
-
+                WebActivity.getBarcodes("test");
+                Toast.makeText(this, "Pobrano kody z bazy danych", Toast.LENGTH_LONG).show();
             default:
                 return super.onOptionsItemSelected(item);
         }
