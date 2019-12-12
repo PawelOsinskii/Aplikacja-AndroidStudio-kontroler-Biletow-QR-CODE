@@ -22,6 +22,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     public static final String androidID = Settings.Secure.getString(MyApplication.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     public static final String DEVICEID = "test";
@@ -32,10 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String SOAP_ACTION = "http://tempuri.org/ValidateBarcodeEntry";
     private static final String METHOD_NAME = "ValidateBarcodeEntry";
     public static DataBaseHelper myDB;
-    public static BufferDataBase buffer;
+    //public static BufferDataBase buffer;
     public static TextView tvresult;
     public static TextView status;
     public static Boolean online = true;
+    public static List<String> bufferList;
     public static int checkorscan =0;
     private int CAMERA_PERMISSION_CODE = 1;
 
@@ -46,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         myDB = new DataBaseHelper(this);
-        buffer = new BufferDataBase(this);
+        bufferList = new ArrayList<>();
+        //buffer = new BufferDataBase(this);
         status = findViewById(R.id.trybOnOf);
         tvresult = findViewById(R.id.tvresult);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

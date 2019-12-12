@@ -26,7 +26,7 @@ public class BufferDataBase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + Table_NAME + " (ID INTEGER NOT NULL , Code VARCHAR(50) NOT NULL, Type INTEGER NOT NULL, OperationTime VARCHAR(50))");
+        db.execSQL("create table " + Table_NAME + " (Code VARCHAR(50) NOT NULL)");
     }
 
     @Override
@@ -35,13 +35,10 @@ public class BufferDataBase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Boolean insertData(int id, String code, int type, String operationTime) {
+    public Boolean insertData(String code) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_1,  id);
-        contentValues.put(COL_2,  code);
-        contentValues.put(COL_3,  type);
-        contentValues.put(COL_4,  operationTime);
+        contentValues.put(COL_1,  code);
         long restult = db.insert(Table_NAME, null, contentValues);
         return restult != -1;
     }
