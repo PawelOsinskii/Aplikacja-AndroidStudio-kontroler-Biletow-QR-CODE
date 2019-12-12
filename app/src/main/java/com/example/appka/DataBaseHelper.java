@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.google.android.material.tabs.TabLayout;
-
 import java.sql.Timestamp;
 import java.util.Calendar;
 
@@ -70,8 +68,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_1,  code);
         contentValues.put(COL_2,  maxEntryCount);
         contentValues.put(COL_3,  currentEntryCount);
-        //contentValues.put(COL_4,  1);
-        //contentValues.put(COL_5,  0);
+        //contentValues.put(COL_4,  validFrom);
+     //   contentValues.put(COL_5,  validFrom);
         contentValues.put(COL_6,  validFrom);
         contentValues.put(COL_7,  validTo);
         contentValues.put(COL_8,  sektor);
@@ -86,6 +84,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_17, Status);
         contentValues.put(COL_18, Event);
         long restult = db.insert(Table_NAME, null, contentValues);
+        db.close();
         return restult != -1;
 
     }
@@ -97,20 +96,21 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT maxEntryCount, currentEntryCount FROM " + Table_NAME + " WHERE " + COL_1 + "=" + "'" + code + "'", null);
 
 
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
+
         if (c != null && c.moveToFirst()) {
 
             wartosc1 = c.getString(0);
             wartosc2 = c.getString(1);
+
+
+        } else{
             c.close();
-            System.out.println("WARTOOOOOOOOOOOOSC1 " + wartosc1);
-            System.out.println("WARTOOOOOOOOOOOOSC2 " + wartosc2);
-
-
-        } else return false;
+            db.close();
+            return false;
+        }
 
         if (Integer.parseInt(wartosc1) > Integer.parseInt(wartosc2)) {
-            System.out.println("WARTOOOOOOOOOOOOSC1 " + wartosc2);
+
             Calendar calendar = Calendar.getInstance();
             int hour24hrs = calendar.get(Calendar.HOUR_OF_DAY);
             int minutes = calendar.get(Calendar.MINUTE);
@@ -122,12 +122,52 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             cv.put(COL_3, (Integer.parseInt(wartosc2) + 1));
             db.update(Table_NAME, cv, "Code=" + "'" + code + "'", null);
 
+            c.close();
             db.close();
             return true;
         }
 
+        c.close();
         db.close();
         return false;
+
+
+    }
+    public String checkTicket(String code){
+        String wartosc1 = "";
+        String wartosc2 = "";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db.rawQuery("SELECT maxEntryCount, currentEntryCount FROM " + Table_NAME + " WHERE " + COL_1 + "=" + "'" + code + "'", null);
+
+
+
+        if (c != null && c.moveToFirst()) {
+
+            wartosc1 = c.getString(0);
+            wartosc2 = c.getString(1);
+            c.close();
+            db.close();
+
+
+
+        } else{
+            c.close();
+            db.close();
+            return "<html><body><font  color=red> "+"BRAK KODU KRESKOWEGO" +"</font> </body><html>";
+        }
+
+        if (Integer.parseInt(wartosc1) > Integer.parseInt(wartosc2)) {
+
+
+
+            c.close();
+            db.close();
+            return "<html><body><font  color=green> "+ "BILET POPRAWNY"+"</font> </body><html>";
+        }
+
+        c.close();
+        db.close();
+        return "<html><body><font color=red> "+ "BILET WYKORZYSTANY"+"</font> </body><html>";
 
 
     }
@@ -139,14 +179,30 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
 
             String wartosc1 = c.getString(0);
-            return " Bilet zostal zeskanowany o " + c.getString(0);
+            return "<html><body><font color=red>  BILET ZOSTAŁ ZESKANOWANY O " + c.getString(0)+"</font> </body><html>";
         }
-        return "Niepoprawny kod kreskowy";
+        return "<html><body><font  color=red> Niepoprawny kod kreskowy </font> </body><html>";
     }
 
     public void clearDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
         String clearDBQuery = "DELETE FROM "+ Table_NAME;
         db.execSQL(clearDBQuery);
+    }
+
+    public boolean checkCodIsInDb(String curEntryCount, String code) {
+        String wartosc1 = "";
+        String wartosc2 = "";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db.rawQuery("SELECT currentEntryCount FROM " + Table_NAME + " WHERE " + COL_1 + "=" + "'" + code + "'", null);
+        if (c != null && c.moveToFirst())
+            if (Integer.parseInt(curEntryCount) == Integer.parseInt(c.getString(0))){
+                c.close();
+                db.close();
+                return false;}
+        c.close();
+        db.close();
+        return true;
+
     }
 }

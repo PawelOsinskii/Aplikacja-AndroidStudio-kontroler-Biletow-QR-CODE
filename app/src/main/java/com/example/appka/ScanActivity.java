@@ -1,11 +1,14 @@
 package com.example.appka;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
+
+import static com.example.appka.MainActivity.myDB;
 
 public class ScanActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler {
     private ZBarScannerView mScannerView;
@@ -39,10 +42,21 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         Log.v("kkkk", result.getContents()); // Prints scan results
         Log.v("uuuu", result.getBarcodeFormat().getName()); // Prints the scan format (qrcode, pdf417 etc.)
 
+        if(MainActivity.checkorscan == 0) {
+            String code = result.getContents();
+            WebActivity.skanujKod(code);
+            if(myDB.validEntry(code)){
+                MainActivity.tvresult.setText(Html.fromHtml("<html><body><font color=green> "+ "MOŻNA WCHODZIĆ"+"</font> </body><html>"));
+            }
+            else MainActivity.tvresult.setText(Html.fromHtml(myDB.lastEntry(code)));
 
-        WebActivity.skanujKod(result.getContents());
-        onBackPressed();
+            onBackPressed();
+        }
+        else{
+            MainActivity.tvresult.setText(Html.fromHtml(myDB.checkTicket(result.getContents())));
+            onBackPressed();
 
+        }
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
     }

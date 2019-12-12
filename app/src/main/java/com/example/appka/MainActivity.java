@@ -23,20 +23,20 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
-    public static DataBaseHelper myDB;
-    private int CAMERA_PERMISSION_CODE = 1;
-    public static TextView tvresult;
-    public static TextView status;
-    public static Boolean online = true;
-    private static final String NAMESPACE = "http://tempuri.org/";
-    private static final String URL = "http://sekob.toliko.pl/Web/ScannerAPI.asmx?wsdl";
-    private static final String SOAP_ACTION = "http://tempuri.org/ValidateBarcodeEntry";
-    private static final String METHOD_NAME = "ValidateBarcodeEntry";
-
     public static final String androidID = Settings.Secure.getString(MyApplication.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     public static final String DEVICEID = "test";
     public static final String FRONT_CAMERA_ID = "1";
     public static final String REAR_CAMERA_ID = "0";
+    private static final String NAMESPACE = "http://tempuri.org/";
+    private static final String URL = "http://sekob.toliko.pl/Web/ScannerAPI.asmx?wsdl";
+    private static final String SOAP_ACTION = "http://tempuri.org/ValidateBarcodeEntry";
+    private static final String METHOD_NAME = "ValidateBarcodeEntry";
+    public static DataBaseHelper myDB;
+    public static TextView tvresult;
+    public static TextView status;
+    public static Boolean online = true;
+    public static int checkorscan =0;
+    private int CAMERA_PERMISSION_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,28 +67,28 @@ public class MainActivity extends AppCompatActivity {
         Button btnCheck = findViewById(R.id.btnCheck);
         Button btnExit = findViewById(R.id.btnExit);
         btnCheck.setOnClickListener(new View.OnClickListener() {
-                                                @Override
+                                        @Override
                                         public void onClick(View v) {
-
-                                            if( myDB.validEntry("1ebb6uxd")) WebActivity.skanujKod("1ebb6uxd");
-                                            else{tvresult.setText(myDB.lastEntry("1ebb6uxd"));
-
+                                            checkorscan = 1;
+                                            if (ContextCompat.checkSelfPermission(MainActivity.this,
+                                                    Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                                                Intent intent = new Intent(MainActivity.this, ScanActivity.class);
+                                                startActivity(intent);
+                                            } else {
+                                                requestStoragePermission();
                                             }
 
-
-//
                                         }
 
 
-                                        // }
-                                    }
 
-        );
+                                    });
 
 
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkorscan=0;
                 if (ContextCompat.checkSelfPermission(MainActivity.this,
                         Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(MainActivity.this, ScanActivity.class);

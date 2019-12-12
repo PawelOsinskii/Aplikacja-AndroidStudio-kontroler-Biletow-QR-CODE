@@ -13,6 +13,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+import static com.example.appka.MainActivity.myDB;
+
 public class WebActivity extends Activity {
     //private DataBaseHelper listOfTickets;
     private TextView lblResult;
@@ -107,8 +109,9 @@ public class WebActivity extends Activity {
                 String numer =          category_list.getProperty("No").toString();
                 String status =         category_list.getProperty("St").toString();
                 String event =          category_list.getProperty("Ev").toString();
-
-                MainActivity.myDB.inserData(code, maxEntryCount, curEntryCount, validFrom, validTo, sektor, rzad, miejsce, pesel, imie, nazwisko, opis, rodzaj, numer, status, event);
+                if(myDB.checkCodIsInDb(curEntryCount, code))
+                     myDB.inserData(code, maxEntryCount, curEntryCount, validFrom, validTo, sektor, rzad, miejsce, pesel, imie, nazwisko, opis, rodzaj, numer, status, event);
+                else System.out.println("juz jest");
             }
         }
     }
