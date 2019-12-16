@@ -45,7 +45,6 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
         if(MainActivity.checkorscan == 0) {
             String code = result.getContents();
-            WebActivity.skanujKod(code);
             if(myDB.validEntry(code)){
                 MainActivity.tvresult.setText(Html.fromHtml("<html><body><font color=green> "+ "MOŻNA WCHODZIĆ"+"</font> </body><html>"));
             }

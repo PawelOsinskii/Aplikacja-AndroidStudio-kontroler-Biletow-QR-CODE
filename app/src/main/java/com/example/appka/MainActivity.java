@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
     public static final String androidID = Settings.Secure.getString(MyApplication.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -35,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String SOAP_ACTION = "http://tempuri.org/ValidateBarcodeEntry";
     private static final String METHOD_NAME = "ValidateBarcodeEntry";
     public static DataBaseHelper myDB;
-    //public static BufferDataBase buffer;
+    public static BufferDataBase buffer;
     public static TextView tvresult;
     public static TextView status;
     public static Boolean online = true;
-    public static List<String> bufferList;
+    //public static List<String> bufferList;
     public static int checkorscan =0;
     private int CAMERA_PERMISSION_CODE = 1;
 
@@ -50,10 +51,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         myDB = new DataBaseHelper(this);
-        bufferList = new ArrayList<>();
-        //buffer = new BufferDataBase(this);
+        //bufferList = new ArrayList<>();
+        buffer = new BufferDataBase(this);
         status = findViewById(R.id.trybOnOf);
         tvresult = findViewById(R.id.tvresult);
+
+        Timer timer = new Timer();
+        timer.schedule(new ValidateCode(), 5000, 5000);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
 //Kod do wyłapywania ID przedniej i tylniej kamery ale powinno się obejść bez tego

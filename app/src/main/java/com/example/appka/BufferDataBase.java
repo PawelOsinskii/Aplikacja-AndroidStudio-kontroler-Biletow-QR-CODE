@@ -14,14 +14,10 @@ import java.util.List;
 public class BufferDataBase extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "buffer.db";
     public static final String Table_NAME = "buffer_table";
-    public static final String COL_1 = "ID";   //INTEGER NOT NULL
-    public static final String COL_2 = "Code"; //VARCHAR(50) NOT NULL
-    public static final String COL_3 = "Type"; //INTEGER NOT NULL
-    public static final String COL_4 = "OperationTime"; //VARCHAR(50) NOT NULL
-//TODO change columns
+    public static final String COL_1 = "CODE";   //INTEGER NOT NULL
 
     public BufferDataBase(@Nullable Context context){
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, 2);
     }
 
     @Override
@@ -43,19 +39,16 @@ public class BufferDataBase extends SQLiteOpenHelper {
         return restult != -1;
     }
 
-    public List<BufferRecord> getAllData() {
+    public List<String> getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + Table_NAME, null);
-        List<BufferRecord> buffList = new ArrayList<>();
+        List<String> buffList = new ArrayList<>();
 
         if(result.getCount() == 0)
             return null;
         while(result.moveToNext()) {
-            int id = result.getInt(0);
-            String code = result.getString(1);
-            int type = result.getInt(2);
-            String operationTime = result.getString(3);
-            buffList.add(new BufferRecord(id, code, type, operationTime));
+            String code = result.getString(0);
+            buffList.add(code);
         }
         return buffList;
     }
@@ -64,6 +57,9 @@ public class BufferDataBase extends SQLiteOpenHelper {
         String clearDBQuery = "DELETE FROM "+ Table_NAME;
         db.execSQL(clearDBQuery);
     }
-
+    public void delteData(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(Table_NAME, "CODE = ?", new String[] {id});
+    }
 
 }

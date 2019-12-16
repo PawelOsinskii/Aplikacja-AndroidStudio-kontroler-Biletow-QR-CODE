@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 //import static com.example.appka.MainActivity.buffer;
 import static com.example.appka.MainActivity.REAR_CAMERA_ID;
-import static com.example.appka.MainActivity.bufferList;
+import static com.example.appka.MainActivity.buffer;
+//import static com.example.appka.MainActivity.bufferList;
 import androidx.annotation.Nullable;
 
 import java.sql.Timestamp;
@@ -118,7 +119,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             cv.put(COL_3, (Integer.parseInt(wartosc2) + 1));
             db.update(Table_NAME, cv, "Code=" + "'" + code + "'", null);
             //buffer.insertData(REAR_CAMERA_ID, code, 33,czas);
-            bufferList.add(code);
+            buffer.insertData(code);
 
             c.close();
             db.close();
