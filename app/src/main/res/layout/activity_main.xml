@@ -21,6 +21,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
     <TextView
         android:id="@+id/tvresult"
         android:layout_width="match_parent"
@@ -85,7 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="left"
-        android:text="@string/status"
+        android:text="Liczba w buforze: 0"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#000"
 

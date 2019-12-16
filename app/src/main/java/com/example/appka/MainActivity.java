@@ -22,8 +22,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     //public static List<String> bufferList;
     public static int checkorscan =0;
     private int CAMERA_PERMISSION_CODE = 1;
+    public long iloscKodow=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,26 +160,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.Offline:
 
-                if (!online) MainActivity.tvresult.setText("Jest już ustawiony tryb offline");
-                else {
-                    MainActivity.tvresult.setText("Zmienione na tryb offline");
-                    MainActivity.status.setText("Status offline");
-                    online = false;
-                }
-                return true;
-            case R.id.Online:
-                if (online) MainActivity.tvresult.setText("Jest już ustawiony tryb online");
-                else {
-                    MainActivity.tvresult.setText("Zmienione na tryb online");
-                    MainActivity.status.setText("Status online");
-                    online = true;
-                }
-                return true;
+
             case R.id.Aktualizuj:
-                if (!online)
-                    MainActivity.tvresult.setText("Nie możesz wykonać aktualizacji w trybie offline");
+
                 WebActivity.getBarcodes(DEVICEID);
                 Toast.makeText(this, "Pobrano kody z bazy danych", Toast.LENGTH_LONG).show();
                 return true;
@@ -188,6 +171,9 @@ public class MainActivity extends AppCompatActivity {
                 myDB.clearDatabase();
                 Toast.makeText(this, "Usunięto kody z lokalnej bazy danych", Toast.LENGTH_LONG).show();
                 return true;
+            case R.id.iloscWBuforze:
+               iloscKodow =  buffer.iloscWBuforze();
+                MainActivity.status.setText("ilosc kodow w buforze: "+iloscKodow);
             default:
                 return super.onOptionsItemSelected(item);
         }

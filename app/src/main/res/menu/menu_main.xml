@@ -6,6 +6,8 @@
         android:title="Online" />
     <item android:id="@+id/Offline"
         android:title="Offline" />
+    <item android:id="@+id/iloscWBuforze"
+        android:title="Ilość kodów w buforze" />
     <item android:id="@+id/Aktualizuj"
         android:title="Aktualizuj" />
     <item android:id="@+id/deleteData"
