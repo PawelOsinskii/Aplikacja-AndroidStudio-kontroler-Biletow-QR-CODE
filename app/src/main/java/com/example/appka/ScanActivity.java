@@ -39,7 +39,6 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
     @Override
     public void handleResult(me.dm7.barcodescanner.zbar.Result result) {
-        // Do something with the result here
         Log.v("kkkk", result.getContents()); // Prints scan results
         Log.v("uuuu", result.getBarcodeFormat().getName()); // Prints the scan format (qrcode, pdf417 etc.)
 

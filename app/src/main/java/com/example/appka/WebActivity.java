@@ -16,41 +16,9 @@ import java.io.IOException;
 import static com.example.appka.MainActivity.myDB;
 
 public class WebActivity extends Activity {
-    //private DataBaseHelper listOfTickets;
     private TextView lblResult;
     private static String NAMESPACE = "http://tempuri.org/";
 
-//    static void skanujKod(String kod) {
-//        String URL = "http://sekob.toliko.pl/Web/ScannerAPI.asmx";
-//        String SOAP_ACTION = "http://tempuri.org/ValidateBarcodeEntry";
-//        String METHOD_NAME = "ValidateBarcodeEntry";
-//        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-//        request.addProperty("code", kod);// Parameter for Method
-//        request.addProperty("scannerId", MainActivity.DEVICEID);// Parameter for Method
-//        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-//        envelope.dotNet = true;
-//        envelope.setOutputSoapObject(request);
-//
-//
-//        try {
-//            int timeOut = 1000;
-//            HttpTransportSE androidHttpTransport = new HttpTransportSE(URL, timeOut);
-//            androidHttpTransport.call(SOAP_ACTION, envelope);
-//            Object resultsRequestSOAP = envelope.bodyIn;
-//
-//
-//            Log.d("Testing", "Response::" + resultsRequestSOAP.toString());
-//            MainActivity.tvresult.setText("Response::" + resultsRequestSOAP.toString());
-//            // Stuff }
-//
-//        } catch (HttpResponseException e) {
-//            e.printStackTrace();
-//        } catch (XmlPullParserException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     static void getBarcodes(String deviceId) {
         String URL = "http://sekob.toliko.pl/WebAS/Service.asmx";
@@ -83,10 +51,7 @@ public class WebActivity extends Activity {
     }
 
     private static void extractDataFromXml(SoapObject resultRequestSoap) {
-        //SoapObject root = (SoapObject) resultRequestSoap.getProperty(0);
         SoapObject s_deals = (SoapObject) resultRequestSoap.getProperty("GetBarcodesResult");
-
-        //System.out.println("********Count : "+ s_deals.getPropertyCount());
 
         for (int i = 0; i < s_deals.getPropertyCount(); i++)
         {

@@ -17,7 +17,7 @@ public class BufferDataBase extends SQLiteOpenHelper {
     public static final String Table_NAME = "buffer_table";
     public static final String COL_1 = "CODE";   //INTEGER NOT NULL
 
-    public BufferDataBase(@Nullable Context context){
+    public BufferDataBase(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 2);
     }
 
@@ -37,7 +37,7 @@ public class BufferDataBase extends SQLiteOpenHelper {
     public Boolean insertData(String code) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_1,  code);
+        contentValues.put(COL_1, code);
         long restult = db.insert(Table_NAME, null, contentValues);
 
         return restult != -1;
@@ -48,26 +48,25 @@ public class BufferDataBase extends SQLiteOpenHelper {
         Cursor result = db.rawQuery("select * from " + Table_NAME, null);
         List<String> buffList = new ArrayList<>();
 
-        if(result.getCount() == 0){
-
-            return null;}
-        while(result.moveToNext()) {
+        if (result.getCount() == 0) {
+            return null;
+        }
+        while (result.moveToNext()) {
             String code = result.getString(0);
             buffList.add(code);
         }
-
         return buffList;
     }
+
     public void clearDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String clearDBQuery = "DELETE FROM "+ Table_NAME;
+        String clearDBQuery = "DELETE FROM " + Table_NAME;
         db.execSQL(clearDBQuery);
-
     }
+
     public void delteData(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(Table_NAME, "CODE = ?", new String[] {id});
-
+        db.delete(Table_NAME, "CODE = ?", new String[]{id});
     }
 
     public long iloscWBuforze() {
@@ -75,6 +74,5 @@ public class BufferDataBase extends SQLiteOpenHelper {
         long count = DatabaseUtils.queryNumEntries(db, Table_NAME);
 
         return count;
-
     }
 }

@@ -29,19 +29,14 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEVICEID = "test";
     public static final Integer FRONT_CAMERA_ID = 1;
     public static final Integer REAR_CAMERA_ID = 0;
-    private static final String NAMESPACE = "http://tempuri.org/";
-    private static final String URL = "http://sekob.toliko.pl/Web/ScannerAPI.asmx?wsdl";
-    private static final String SOAP_ACTION = "http://tempuri.org/ValidateBarcodeEntry";
-    private static final String METHOD_NAME = "ValidateBarcodeEntry";
     public static DataBaseHelper myDB;
     public static BufferDataBase buffer;
     public static TextView tvresult;
     public static TextView status;
     public static Boolean online = true;
-    //public static List<String> bufferList;
-    public static int checkorscan =0;
+    public static int checkorscan = 0;
     private int CAMERA_PERMISSION_CODE = 1;
-    public long iloscKodow=0;
+    public long iloscKodow = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         myDB = new DataBaseHelper(this);
-        //bufferList = new ArrayList<>();
         buffer = new BufferDataBase(this);
         status = findViewById(R.id.trybOnOf);
         tvresult = findViewById(R.id.tvresult);
@@ -59,18 +53,6 @@ public class MainActivity extends AppCompatActivity {
         timer.schedule(new ValidateCode(), 5000, 5000);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-//Kod do wyłapywania ID przedniej i tylniej kamery ale powinno się obejść bez tego
-//        CameraManager cManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-//        try {
-//            for(final String cameraId : cManager.getCameraIdList()){
-//                CameraCharacteristics characteristics = cManager.getCameraCharacteristics(cameraId);
-//                int cOrientation = characteristics.get(CameraCharacteristics.LENS_FACING);
-//                if(cOrientation == CameraCharacteristics.LENS_FACING_FRONT) FRONT_CAMERA =  cameraId;
-//            }
-//        } catch (CameraAccessException e) {
-//            e.printStackTrace();
-//        }
         tvresult.setText(androidID);
 
         StrictMode.setThreadPolicy(policy);
@@ -78,27 +60,23 @@ public class MainActivity extends AppCompatActivity {
         Button btnCheck = findViewById(R.id.btnCheck);
         Button btnExit = findViewById(R.id.btnExit);
         btnCheck.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            checkorscan = 1;
-                                            if (ContextCompat.checkSelfPermission(MainActivity.this,
-                                                    Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                                                Intent intent = new Intent(MainActivity.this, ScanActivity.class);
-                                                startActivity(intent);
-                                            } else {
-                                                requestStoragePermission();
-                                            }
-                                        }
-
-
-
-                                    });
-
+            @Override
+            public void onClick(View v) {
+                checkorscan = 1;
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(MainActivity.this, ScanActivity.class);
+                    startActivity(intent);
+                } else {
+                    requestStoragePermission();
+                }
+            }
+        });
 
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkorscan=0;
+                checkorscan = 0;
                 if (ContextCompat.checkSelfPermission(MainActivity.this,
                         Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(MainActivity.this, ScanActivity.class);
@@ -161,9 +139,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-
             case R.id.Aktualizuj:
-
                 WebActivity.getBarcodes(DEVICEID);
                 Toast.makeText(this, "Pobrano kody z bazy danych", Toast.LENGTH_LONG).show();
                 return true;
@@ -172,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Usunięto kody z lokalnej bazy danych", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.iloscWBuforze:
-               iloscKodow =  buffer.iloscWBuforze();
-                MainActivity.status.setText("ilosc kodow w buforze: "+iloscKodow);
+                iloscKodow = buffer.iloscWBuforze();
+                MainActivity.status.setText("ilosc kodow w buforze: " + iloscKodow);
             default:
                 return super.onOptionsItemSelected(item);
         }
