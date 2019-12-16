@@ -5,14 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-//import static com.example.appka.MainActivity.buffer;
-import static com.example.appka.MainActivity.REAR_CAMERA_ID;
-import static com.example.appka.MainActivity.buffer;
-//import static com.example.appka.MainActivity.bufferList;
+
 import androidx.annotation.Nullable;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+
+import static com.example.appka.MainActivity.buffer;
+
+//import static com.example.appka.MainActivity.buffer;
+//import static com.example.appka.MainActivity.bufferList;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Kody.db";
@@ -35,7 +37,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COL_16 = "Numer"; //INTEGER NOT NULL DEFAULT '0'
     public static final String COL_17 = "Status"; //INTEGER NOT NULL DEFAULT '0'
     public static final String COL_18 = "Event"; //VARCHAR(250) DEFAULT '',PRIMARY KEY(Code))";
-
+    long iloscKodow = 0;
     public DataBaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
 
@@ -120,6 +122,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.update(Table_NAME, cv, "Code=" + "'" + code + "'", null);
             //buffer.insertData(REAR_CAMERA_ID, code, 33,czas);
             buffer.insertData(code);
+            iloscKodow =  buffer.iloscWBuforze();
+            MainActivity.status.setText("ilosc kodow w buforze: "+iloscKodow);
 
             c.close();
             db.close();

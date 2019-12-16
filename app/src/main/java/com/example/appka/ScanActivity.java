@@ -14,7 +14,7 @@ import static com.example.appka.MainActivity.myDB;
 public class ScanActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler {
     private ZBarScannerView mScannerView;
     //camera permission is needed.
-
+    BufferDataBase buffor;
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -47,6 +47,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
             String code = result.getContents();
             if(myDB.validEntry(code)){
                 MainActivity.tvresult.setText(Html.fromHtml("<html><body><font color=green> "+ "MOŻNA WCHODZIĆ"+"</font> </body><html>"));
+
             }
             else MainActivity.tvresult.setText(Html.fromHtml(myDB.lastEntry(code)));
 

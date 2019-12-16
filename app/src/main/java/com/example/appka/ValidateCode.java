@@ -31,6 +31,7 @@ public class ValidateCode extends TimerTask {
                 System.out.println(code);
                 validateCode(code);
                 buffer.delteData(code);
+                MainActivity.status.setText("ilosc kodow w buforze: "+buffer.iloscWBuforze());
             }
         }
     }
