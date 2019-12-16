@@ -36,6 +36,7 @@ public class ValidateCode extends TimerTask {
     }
 
     private void validateCode(String code){
+        System.out.println(code);
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         request.addProperty("code", code);// Parameter for Method
         request.addProperty("scannerId", MainActivity.DEVICEID);// Parameter for Method

@@ -47,8 +47,6 @@ public class BufferDataBase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + Table_NAME, null);
         List<String> buffList = new ArrayList<>();
-        result.close();
-        db.close();
 
         if(result.getCount() == 0){
 
