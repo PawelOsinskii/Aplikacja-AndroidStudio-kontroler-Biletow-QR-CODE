@@ -1,12 +1,16 @@
 package com.example.appka;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,12 +27,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.Timer;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     public static final String androidID = Settings.Secure.getString(MyApplication.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-    public static final String DEVICEID = "test";
-    public static final Integer FRONT_CAMERA_ID = 1;
-    public static final Integer REAR_CAMERA_ID = 0;
     public static DataBaseHelper myDB;
     public static BufferDataBase buffer;
     public static TextView tvresult;
@@ -37,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
     public static int checkorscan = 0;
     private int CAMERA_PERMISSION_CODE = 1;
     public long iloscKodow = 0;
+    public static String deviceId;
+
+    public static String getDeviceId() {
+        return deviceId;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         Button btnScan = findViewById(R.id.btnScan);
         Button btnCheck = findViewById(R.id.btnCheck);
-        Button btnExit = findViewById(R.id.btnExit);
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,9 +147,14 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.Aktualizuj:
-                WebActivity.getBarcodes(DEVICEID);
+                if(deviceId != null){
+                WebActivity.getBarcodes(deviceId);
                 Toast.makeText(this, "Pobrano kody z bazy danych", Toast.LENGTH_LONG).show();
-                return true;
+                return true;}
+                else{
+                    Toast.makeText(this, "Musisz najpierw z synchronizować urządzenie", Toast.LENGTH_LONG).show();
+                    return true;
+                }
             case R.id.deleteData:
                 myDB.clearDatabase();
                 Toast.makeText(this, "Usunięto kody z lokalnej bazy danych", Toast.LENGTH_LONG).show();
@@ -150,8 +162,33 @@ public class MainActivity extends AppCompatActivity {
             case R.id.iloscWBuforze:
                 iloscKodow = buffer.iloscWBuforze();
                 MainActivity.status.setText("ilosc kodow w buforze: " + iloscKodow);
+            case R.id.synchro:
+                deviceId  =  getIMEINumber();
+                WebActivity.sendUUIDToApi(deviceId);
+                if(deviceId != null){
+                    Toast.makeText(this, "Ustawiono device ID", Toast.LENGTH_LONG).show();
+                }
+
+
+
             default:
                 return super.onOptionsItemSelected(item);
         }
+
     }
+    @SuppressWarnings("deprecation")
+    private String getIMEINumber() {
+        String IMEINumber = "";
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            TelephonyManager telephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                IMEINumber = telephonyMgr.getImei();
+            } else {
+                IMEINumber = telephonyMgr.getDeviceId();
+            }
+        }
+        return IMEINumber;
+    }
+
 }
+//todo trzeba sprawdzic czy dziala tajmer na wysylanie w ValidaateCode, połączyć skanowanie tak aby jednoczesnie laczylo sie z api i na lokalnej bazie danych. zrobic haslo do admina zeby usuniecie kodow i pobranie bylo tylko z adm, zrobic tak aby automatycznie aktualizowalo sie z baza danych jak bedzie polaczenie internetowe.

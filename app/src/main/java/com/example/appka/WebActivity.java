@@ -53,36 +53,66 @@ public class WebActivity extends Activity {
     private static void extractDataFromXml(SoapObject resultRequestSoap) {
         SoapObject s_deals = (SoapObject) resultRequestSoap.getProperty("GetBarcodesResult");
 
-        for (int i = 0; i < s_deals.getPropertyCount(); i++)
-        {
+        for (int i = 0; i < s_deals.getPropertyCount(); i++) {
             Object property = s_deals.getProperty(i);
-            if (property instanceof SoapObject)
-            {
+            if (property instanceof SoapObject) {
                 SoapObject category_list = (SoapObject) property;
-                String code =           category_list.getProperty("C" ).toString();
-                String maxEntryCount =  category_list.getProperty("E" ).toString();
-                String curEntryCount =  category_list.getProperty("CE").toString();
-                String validFrom =      category_list.getProperty("F" ).toString();
-                String validTo =        category_list.getProperty("T" ).toString();
-                String sektor =         category_list.getProperty("Se").toString();
-                String rzad =           category_list.getProperty("Rz").toString();
-                String miejsce =        category_list.getProperty("Mi").toString();
-                String pesel =          category_list.getProperty("PE").toString();
-                String imie =           category_list.getProperty("Im").toString();
-                String nazwisko =       category_list.getProperty("Na").toString();
-                String opis =           category_list.getProperty("O" ).toString();
-                String rodzaj =         category_list.getProperty("Ro").toString();
-                String numer =          category_list.getProperty("No").toString();
-                String status =         category_list.getProperty("St").toString();
-                String event =          category_list.getProperty("Ev").toString();
-                if(myDB.checkCodIsInDb(curEntryCount, code))
-                     myDB.inserData(code, maxEntryCount, curEntryCount, validFrom, validTo, sektor, rzad, miejsce, pesel, imie, nazwisko, opis, rodzaj, numer, status, event);
+                String code = category_list.getProperty("C").toString();
+                String maxEntryCount = category_list.getProperty("E").toString();
+                String curEntryCount = category_list.getProperty("CE").toString();
+                String validFrom = category_list.getProperty("F").toString();
+                String validTo = category_list.getProperty("T").toString();
+                String sektor = category_list.getProperty("Se").toString();
+                String rzad = category_list.getProperty("Rz").toString();
+                String miejsce = category_list.getProperty("Mi").toString();
+                String pesel = category_list.getProperty("PE").toString();
+                String imie = category_list.getProperty("Im").toString();
+                String nazwisko = category_list.getProperty("Na").toString();
+                String opis = category_list.getProperty("O").toString();
+                String rodzaj = category_list.getProperty("Ro").toString();
+                String numer = category_list.getProperty("No").toString();
+                String status = category_list.getProperty("St").toString();
+                String event = category_list.getProperty("Ev").toString();
+                if (myDB.checkCodIsInDb(curEntryCount, code))
+                    myDB.inserData(code, maxEntryCount, curEntryCount, validFrom, validTo, sektor, rzad, miejsce, pesel, imie, nazwisko, opis, rodzaj, numer, status, event);
                 else System.out.println("juz jest");
             }
         }
     }
 
+    static void sendUUIDToApi(String uuid) {
+        String URL = "http://sekob.toliko.pl/WebAS/Service.asmx";
+        String SOAP_ACTION = "http://tempuri.org/UploadScannerNames";
+        String METHOD_NAME = "UploadScannerNames";
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+        request.addProperty("deviceId", uuid);
+        request.addProperty("scannerNames", "string");
+        request.addProperty("scannerNames", "brak");
+        System.out.println(request);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+
+
+        try {
+            HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+            androidHttpTransport.call(SOAP_ACTION, envelope);
+            SoapObject resultRequestSoap = (SoapObject) envelope.bodyIn;
+            Log.d("Web", "Response::" + resultRequestSoap.toString());
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (HttpResponseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 }
+
+
 
 
 

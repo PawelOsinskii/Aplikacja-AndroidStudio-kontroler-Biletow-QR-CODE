@@ -29,18 +29,21 @@ public class ValidateCode extends TimerTask {
         if (myBuffer != null) {
             for (String code : myBuffer) {
                 System.out.println(code);
-                validateCode(code);
-                buffer.delteData(code);
-                MainActivity.status.setText("ilosc kodow w buforze: " + buffer.iloscWBuforze());
+                if(validateCode(code)) {
+                    buffer.delteData(code);
+                    MainActivity.status.setText("ilosc kodow w buforze: " + buffer.iloscWBuforze());
+                }
+
+
             }
         }
     }
 
-    private void validateCode(String code) {
+    private Boolean validateCode(String code) {
         System.out.println(code);
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         request.addProperty("code", code);// Parameter for Method
-        request.addProperty("scannerId", MainActivity.DEVICEID);// Parameter for Method
+        request.addProperty("scannerId", MainActivity.getDeviceId());// Parameter for Method
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.dotNet = true;
         envelope.setOutputSoapObject(request);
@@ -55,10 +58,15 @@ public class ValidateCode extends TimerTask {
 
         } catch (HttpResponseException e) {
             e.printStackTrace();
+            return false;
         } catch (XmlPullParserException e) {
             e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
+
 }

@@ -6,4 +6,5 @@
     <string name="scan">Skanuj</string>
     <string name="result">Wynik skanowania:</string>
     <string name="status">Status Online</string>
+    <string name="synchro">Sychronizacja</string>
 </resources>

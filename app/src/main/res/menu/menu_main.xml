@@ -2,16 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.appka.MainActivity">
-    <item android:id="@+id/Online"
-        android:title="Online" />
-    <item android:id="@+id/Offline"
-        android:title="Offline" />
+    <item android:id="@+id/administrator"
+        android:title="Administrator" />
     <item android:id="@+id/iloscWBuforze"
         android:title="Ilość kodów w buforze" />
     <item android:id="@+id/Aktualizuj"
         android:title="Aktualizuj" />
     <item android:id="@+id/deleteData"
         android:title="Usuń Dane" />
+    <item android:id="@+id/synchro"
+        android:title="Synchronizacja" />
 
 
 </menu>
