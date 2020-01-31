@@ -1,8 +1,6 @@
 package com.example.appka;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,7 +25,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.Timer;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     public static final String androidID = Settings.Secure.getString(MyApplication.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -35,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
     public static BufferDataBase buffer;
     public static TextView tvresult;
     public static TextView status;
-    public static Boolean online = true;
     public static int checkorscan = 0;
-    private int CAMERA_PERMISSION_CODE = 1;
-    public long iloscKodow = 0;
     public static String deviceId;
+    public static boolean admin = false;
+    public long iloscKodow = 0;
+    private int CAMERA_PERMISSION_CODE = 1;
 
     public static String getDeviceId() {
         return deviceId;
@@ -57,11 +54,12 @@ public class MainActivity extends AppCompatActivity {
         status = findViewById(R.id.trybOnOf);
         tvresult = findViewById(R.id.tvresult);
 
+
         Timer timer = new Timer();
         timer.schedule(new ValidateCode(), 5000, 5000);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        tvresult.setText(androidID);
+
 
         StrictMode.setThreadPolicy(policy);
         Button btnScan = findViewById(R.id.btnScan);
@@ -144,38 +142,83 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
 
             case R.id.Aktualizuj:
-                if(deviceId != null){
-                WebActivity.getBarcodes(deviceId);
-                Toast.makeText(this, "Pobrano kody z bazy danych", Toast.LENGTH_LONG).show();
-                return true;}
-                else{
-                    Toast.makeText(this, "Musisz najpierw z synchronizować urządzenie", Toast.LENGTH_LONG).show();
-                    return true;
+                if (!admin){
+                    Toast.makeText(this, "nie masz uprawnień", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    if (deviceId != null) {
+                        WebActivity.getBarcodes(deviceId);
+                        Toast.makeText(this, "Pobrano kody z bazy danych", Toast.LENGTH_LONG).show();
+                        return true;
+                    } else {
+                        Toast.makeText(this, "Musisz najpierw z synchronizować urządzenie", Toast.LENGTH_LONG).show();
+                        return true;
+                    }
                 }
             case R.id.deleteData:
+                if (!admin){
+                    Toast.makeText(this, "nie masz uprawnień", Toast.LENGTH_LONG).show();
+                }
+                else{
                 myDB.clearDatabase();
-                Toast.makeText(this, "Usunięto kody z lokalnej bazy danych", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Usunięto kody z lokalnej bazy danych", Toast.LENGTH_LONG).show();}
                 return true;
             case R.id.iloscWBuforze:
                 iloscKodow = buffer.iloscWBuforze();
                 MainActivity.status.setText("ilosc kodow w buforze: " + iloscKodow);
+                return true;
             case R.id.synchro:
-                deviceId  =  getIMEINumber();
+                deviceId = getIMEINumber();
                 WebActivity.sendUUIDToApi(deviceId);
-                if(deviceId != null){
+                if (deviceId != null) {
                     Toast.makeText(this, "Ustawiono device ID", Toast.LENGTH_LONG).show();
                 }
+                return true;
+            case R.id.administrator:
+                if (!admin) {
+                    new AlertDialog.Builder(this)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Administrator Activity")
+                            .setMessage("Are you sure do you want  to start administrator mode?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    admin = true;
 
 
+                                }
 
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                }
+                if (admin) {
+                    new AlertDialog.Builder(this)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Administrator Activity")
+                            .setMessage("Are you sure do you want  to finish administrator mode?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    admin = false;
+
+                                }
+
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
     }
+
     @SuppressWarnings("deprecation")
     private String getIMEINumber() {
         String IMEINumber = "";
