@@ -1,2 +1,2 @@
 # Appka
-asd
+Aplikacja mobilna do kontroli biletów - projekt PW
